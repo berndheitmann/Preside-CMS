@@ -1392,13 +1392,15 @@ component {
 		var parent          = "";
 		var startDepth      = StructKeyExists( arguments, "rootPage" ) ? arguments.rootPage._hierarchy_depth : 0;
 		var firstLevelDepth = StructKeyExists( arguments, "rootPage" ) ? arguments.rootPage._hierarchy_depth + 1 : 0;
+		var parentDepth     = 0;
 
 		for( node in treeQuery ){
 			parents[ ( node._hierarchy_depth+1 ) - startDepth ] = node;
 			node.children    = [];
 			node.hasChildren = false;
+			parentDepth      = node._hierarchy_depth - startDepth;
 
-			if ( ( node._hierarchy_depth - startDepth ) > firstLevelDepth ) {
+			if ( ( parentDepth > firstLevelDepth ) &&  ( parents.len() >= parentDepth ) ) {
 				parent = parents[ ( node._hierarchy_depth ) - startDepth ];
 				parent.hasChildren = true;
 				ArrayAppend( parent.children, node );
